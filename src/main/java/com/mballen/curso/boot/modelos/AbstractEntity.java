@@ -1,4 +1,4 @@
-package com.mballen.curso.boot.domain;
+package com.mballen.curso.boot.modelos;
 
 import java.io.Serializable;
 import javax.persistence.*;

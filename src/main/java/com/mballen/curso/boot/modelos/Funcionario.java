@@ -1,4 +1,4 @@
-package com.mballen.curso.boot.domain;
+package com.mballen.curso.boot.modelos;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
