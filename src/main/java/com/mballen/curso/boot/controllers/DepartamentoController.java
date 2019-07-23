@@ -68,6 +68,7 @@ public class DepartamentoController {
 			mv.setViewName("redirect:/departamentos/listar");
 			attr.addFlashAttribute("success", "Departamento excluído com sucesso!");
 		}else {
+			mv.setViewName("redirect:/departamentos/listar");
 			attr.addFlashAttribute("fail", "Departamento não excluído, pois possui cargo(s) vinculado(s).");
 		}
 		return mv;
