@@ -19,6 +19,7 @@ public class DepartamentoController {
 	@Autowired
 	private RepositorioDepartamento depRepository;
 	
+	
 	@GetMapping("/cadastrar")
 	public String cadastrar(Departamento departamento) {
 		return "/departamento/cadastro";

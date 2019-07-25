@@ -2,8 +2,11 @@ package com.mballen.curso.boot.modelos;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
 import javax.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
+import org.springframework.format.annotation.NumberFormat;
+import org.springframework.format.annotation.NumberFormat.Style;
 
 @SuppressWarnings("serial")
 @Entity
@@ -13,13 +16,17 @@ public class Funcionario extends AbstractEntity<Long> {
 	@Column(nullable = false, unique = true)
 	private String nome;
 	
+	
 	@Column(nullable = false, columnDefinition = "DECIMAL(7,2) DEFAULT 0.00")
+	@NumberFormat(style = Style.CURRENCY, pattern = "#,##0.00")
 	private BigDecimal salario;
 	
+	@DateTimeFormat(iso = ISO.DATE)
 	@Column(name = "data_entrada", nullable = false, columnDefinition = "DATE")
 	private LocalDate dataEntrada;
 	
-	@Column(name = "data_saida", columnDefinition = "DATE")
+	@DateTimeFormat(iso = ISO.DATE)
+	@Column(name = "data_saida", columnDefinition = "DATE", nullable = true)
 	private LocalDate dataSaida;
 	
 	@OneToOne(cascade = CascadeType.ALL)
