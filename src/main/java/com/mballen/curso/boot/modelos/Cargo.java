@@ -3,21 +3,27 @@ package com.mballen.curso.boot.modelos;
 import java.util.List;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "cargos")
 public class Cargo extends AbstractEntity<Long> {
 	
+	@NotBlank(message = "Informe um nome.")
+	@Size(max = 60, message = "O nome do cargo deve conter no máximo 60 caracteres.")
 	@Column(name = "nome", nullable = false, unique = true, length = 60)
 	private String nome;
 	
+	@NotNull(message = "Selecione um departamento relativo ao cargo.")
 	@ManyToOne
 	@JoinColumn(name = "id_departamento_fk")
 	private Departamento departamento;
 	
 	@OneToMany(mappedBy = "cargo")
-	private List<Funcionario> funcionario;
+	private List<Funcionario> funcionarios;
 
 	public String getNome() {
 		return nome;
@@ -36,10 +42,10 @@ public class Cargo extends AbstractEntity<Long> {
 	}
 
 	public List<Funcionario> getFuncionario() {
-		return funcionario;
+		return funcionarios;
 	}
 
-	public void setFuncionario(List<Funcionario> funcionario) {
-		this.funcionario = funcionario;
+	public void setFuncionario(List<Funcionario> funcionarios) {
+		this.funcionarios = funcionarios;
 	}	
 }

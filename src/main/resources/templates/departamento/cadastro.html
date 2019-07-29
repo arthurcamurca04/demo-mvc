@@ -27,11 +27,14 @@
 	        
 	            <form th:action="${departamento.id == null} ? @{/departamentos/salvar} : @{/departamentos/editar}" method="POST"
 	            		th:object="${departamento}">
+	            		
+	            	<div th:replace="fragmentos/validacao :: validacao"></div>
+	            	
 	                <div class="form-row">
 	                    <div class="form-group col-md-6">
 	                        <label for="nome">Departamento</label>
 	                        <input type="text" class="form-control" id="nome"
-	                               placeholder="Nome Departamento" autofocus="autofocus" th:field="*{nome}" required/>
+	                               placeholder="Nome Departamento" autofocus="autofocus" th:field="*{nome}"/>
 	                    </div>
 	                </div>
 	                <input type="hidden" id="id" th:field="*{id}"/>

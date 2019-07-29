@@ -22,13 +22,15 @@
 	            </a>
 	        </nav>
 	
+			<div th:replace="fragmentos/alert"></div>
 	        <div class="container" id="cadastro">
-	        
-	       	 	<div th:replace="fragmentos/alert"></div>
-	       	 	
+	        	       	 	
 	            <form th:action="${cargo.id == null} ? @{/cargos/salvar} : @{/cargos/editar}" th:object="${cargo}" method="POST">
+	                 
+	                <div th:replace="fragmentos/validacao :: validacao"></div>
+	                
 	                <div class="form-row">
-	                    <div class="form-group col-md-6">
+	                	<div class="form-group col-md-6">
 	                        <label for="nome">Nome do Cargo</label>
 	                        <input type="text" class="form-control" id="nome" placeholder="Nome Cargo" autofocus="autofocus"
 	                               th:field="*{nome}"/>

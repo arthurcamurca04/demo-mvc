@@ -2,8 +2,11 @@ package com.mballen.curso.boot.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,21 +32,26 @@ public class CargoController {
 
 	@GetMapping("/cadastrar")
 	public String cadastrar(Cargo cargo) {
-		return "/cargo/cadastro";
+		return "cargo/cadastro";
 	}
 	
 	@GetMapping("/listar")
 	public ModelAndView listar() {
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("/cargo/lista");
+		mv.setViewName("cargo/lista");
 		mv.addObject("cargos", cargoRepository.findAll());
 		return mv;
 		
 	}
 	
 	@PostMapping("/salvar")
-	public ModelAndView salvar(Cargo cargo, RedirectAttributes attr) {
+	public ModelAndView salvar(@Valid Cargo cargo, BindingResult result, RedirectAttributes attr) {
 		ModelAndView model = new ModelAndView();
+		
+		if(result.hasErrors()) {
+			model.setViewName("cargo/cadastro");
+			return model;
+		}
 		model.setViewName("redirect:/cargos/cadastrar");
 		model.addObject("cargo", cargoRepository.save(cargo));
 		attr.addFlashAttribute("success", "Cargo inserido com sucesso!");
@@ -60,14 +68,19 @@ public class CargoController {
 		ModelAndView mv = new ModelAndView();
 		Cargo cargo = cargoRepository.getOne(id);
 		mv.addObject("cargo",cargo);
-		mv.setViewName("/cargo/cadastro");
+		mv.setViewName("cargo/cadastro");
 		return mv;
 		
 	}
 	
 	@PostMapping("/editar")
-	public ModelAndView editar(Cargo cargo, RedirectAttributes attr) {
+	public ModelAndView editar(@Valid Cargo cargo, BindingResult result, RedirectAttributes attr) {
 		ModelAndView mv = new ModelAndView();
+		
+		if(result.hasErrors()) {
+			mv.setViewName("cargo/cadastro");
+			return mv;
+		}
 		mv.addObject("cargo", cargoRepository.save(cargo));
 		attr.addFlashAttribute("success", "Cargo editado com sucesso!");
 		mv.setViewName("redirect:/cargos/cadastrar");
@@ -85,7 +98,7 @@ public class CargoController {
 			attr.addFlashAttribute("success", "Cargo excluído com sucesso!");
 		}else {
 			mv.setViewName("redirect:/cargos/listar");
-			attr.addFlashAttribute("fail", "Cargo não excluído, pois possui funcionário(s) vinculado(s).");
+			attr.addFlashAttribute("fail", "Cargo não excluído.");
 		}
 		return mv;
 	}

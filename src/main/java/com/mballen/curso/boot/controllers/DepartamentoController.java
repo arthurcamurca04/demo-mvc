@@ -1,7 +1,10 @@
 package com.mballen.curso.boot.controllers;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,21 +25,26 @@ public class DepartamentoController {
 	
 	@GetMapping("/cadastrar")
 	public String cadastrar(Departamento departamento) {
-		return "/departamento/cadastro";
+		return "departamento/cadastro";
 	}
 	
 	@GetMapping("/listar")
 	public ModelAndView listar() {
 		
 		ModelAndView model = new ModelAndView();
-		model.setViewName("/departamento/lista");
+		model.setViewName("departamento/lista");
 		model.addObject("departamentos", depRepository.findAll());
 		return model;
 	}
 	
 	@PostMapping("/salvar")
-	public ModelAndView salvar(Departamento departamento, RedirectAttributes attr) {
+	public ModelAndView salvar(@Valid Departamento departamento, BindingResult result, RedirectAttributes attr) {
 		ModelAndView model = new ModelAndView();
+		
+		if (result.hasErrors()) {
+			model.setViewName("departamento/cadastro");
+			return model;
+		}
 		model.setViewName("redirect:/departamentos/cadastrar");
 		model.addObject("departamento", depRepository.save(departamento));
 		attr.addFlashAttribute("success", "Departamento inserido com sucesso!");
@@ -47,13 +55,18 @@ public class DepartamentoController {
 	public ModelAndView preEditar(@PathVariable("id") Long id) {
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("departamento", depRepository.getOne(id));
-		mv.setViewName("/departamento/cadastro");
+		mv.setViewName("departamento/cadastro");
 		return mv;
 	}
 	
 	@PostMapping("/editar")
-	public ModelAndView editar(Departamento departamento, RedirectAttributes attr) {
+	public ModelAndView editar(@Valid Departamento departamento, BindingResult result, RedirectAttributes attr) {
 		ModelAndView mv = new ModelAndView();
+		
+		if (result.hasErrors()) {
+			mv.setViewName("departamento/cadastro");
+			return mv;
+		}
 		mv.addObject("departamento", depRepository.save(departamento));
 		attr.addFlashAttribute("success", "Departamento editado com sucesso!");
 		mv.setViewName("redirect:/departamentos/cadastrar");
